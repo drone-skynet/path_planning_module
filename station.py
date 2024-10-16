@@ -31,7 +31,7 @@ class Station:
   def __repr__(self):
     return self.name
     #return (f"Station(id={self.id}, name={self.name}, "
-     #       f"latitude={self.latitude}, longitude={self.longitude}, capacity={self.capacity})")
+    #       f"latitude={self.latitude}, longitude={self.longitude}, capacity={self.capacity})")
 
 class Edge:
   def __init__(self, origin, destination):
