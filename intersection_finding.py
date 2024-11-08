@@ -1,5 +1,6 @@
-from objects import Intersection
+from .objects.intersection import Intersection
 import numpy as np
+
 
 def solution_of_2_edges(edge1, edge2) :
   slope_edge1 = (edge1.destination.latitude - edge1.origin.latitude)/(edge1.destination.longitude - edge1.origin.longitude)
