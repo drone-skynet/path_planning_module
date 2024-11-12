@@ -1,5 +1,6 @@
 from .utils.utils import haversine, find_distance_between_2_drones
 from .objects.drone import Drone
+from .objects.station import Station
 
 
 def check_collision_of_one_intersection(intersection):
@@ -63,9 +64,17 @@ def check_collision_of_one_intersection(intersection):
         if drone != prior_drone:
           drone.go_flag = 0
       prior_drone.go_flag *= 1
+      if(isStation(intersection) and prior_drone.go_flag == 1) :
+         #통과하는 교점이 역이고, 통행권을 얻은 경우
+          prior_drone.add_to_next_edge()
+
       
-
-
+def isStation(intersection) :
+  for station in Station.stations :
+    distance = haversine([station.latitude, station.longitude], [intersection.latitude, intersection.longitude])
+    if(distance < 0.005) : #역과의 거리가 5m 이내면 그냥 역 교점
+      return True
+  return False
 
 def check_collision_of_all_intersections(intersections) :
   for intersection in intersections:

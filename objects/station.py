@@ -1,4 +1,5 @@
 class Station:
+  stations = []
   def __init__(self, id, name, longitude, latitude, capacity):
     self.id = id
     self.name = name

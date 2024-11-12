@@ -1,5 +1,6 @@
 from .objects.intersection import Intersection
 import numpy as np
+import mysql.connector
 
 
 def solution_of_2_edges(edge1, edge2) :
@@ -48,10 +49,41 @@ def find_all_intersections(edges) :
   return intersections
 
 
-# 테스트 코드
-  max_its = intersections[0]
-  for its in intersections :
-    if(len(its.edges) < len(max_its.edges)) :
-      max_its = its
-  print(max_its.edges)
-  print(len(max_its.edges))
+def save_intersections_to_db(intersections):
+    try:
+        # MySQL 연결 설정
+        connection = mysql.connector.connect(
+            host='localhost',
+            database='drone',
+            user='your_username',
+            password='your_password'
+        )
+        
+        cursor = connection.cursor()
+        
+        # SQL 쿼리 준비
+        sql = """INSERT INTO intersections 
+                (latitude, longitude, edge_count) 
+                VALUES (%s, %s, %s)"""
+                
+        # 각 교점에 대해 데이터 삽입
+        for intersection in intersections:
+            values = (
+                intersection.latitude,
+                intersection.longitude,
+                len(intersection.edges)
+            )
+            cursor.execute(sql, values)
+            
+        # 변경사항 저장
+        connection.commit()
+        print(f"{len(intersections)}개의 교점이 데이터베이스에 저장되었습니다.")
+        
+    except mysql.connector.Error as error:
+        print(f"Failed to insert record into MySQL table: {error}")
+        
+    finally:
+        if connection.is_connected():
+            cursor.close()
+            connection.close()
+            print("MySQL connection is closed")

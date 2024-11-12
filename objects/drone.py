@@ -59,12 +59,12 @@ class Drone:
       self.edge.drones_on_the_edge.remove(self)
     if(len(self.destinations) < 1) :
       return 
-    edge = self.__add_to_next_edge()
+    edge = self.add_to_next_edge()
     self.edge = edge
     print("현재 드론:", self.id, "간선:",self.prev_station.name,"-",self.destinations[0].name)
     return
 
-  def __add_to_next_edge(self):
+  def add_to_next_edge(self):
     if len(self.destinations) < 2:
       return None
     next_edge = find_edge_by_point(Drone.edges, self.destinations[0], self.destinations[1]) 
@@ -80,8 +80,9 @@ class Drone:
       self.velocity = self._calculate_lat_lon_speed(self.latitude, self.longitude, dest.latitude, dest.longitude, self.speed)
       self.latitude += self.velocity[0]
       self.longitude += self.velocity[1]
-      if len(self.destinations) > 0 and haversine([self.latitude, self.longitude], [self.destinations[0].latitude, self.destinations[0].longitude]) <= 0.05:
-          self.__add_to_next_edge()
+      #다음 간선에 미리 추가
+      # if len(self.destinations) > 0 and haversine([self.latitude, self.longitude], [self.destinations[0].latitude, self.destinations[0].longitude]) <= 0.05:
+      #     self.__add_to_next_edge()
       time.sleep(0.5)
       # 드론의 현재 위치에서 목적지까지의 벡터
       if(len(self.destinations) > 0) :
@@ -128,7 +129,7 @@ class Drone:
   def take_off(self):
     self.take_off_time = time.time()
     self.is_armed = True
-    self.__add_to_next_edge()    
+    self.add_to_next_edge()    
     self.prev_station = self.destinations[0]
     self.destinations.pop(0)
     self.__renew_edge()

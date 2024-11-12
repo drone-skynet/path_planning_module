@@ -130,6 +130,7 @@ if __name__ == '__main__':
     get_edges_by_stations()
     Drone.edges = edges
     Drone.drones = drones
+    Station.stations = stations
     print("간선 수:",len(edges))
     intersections = find_all_intersections(edges)
     
